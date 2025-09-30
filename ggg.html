@@ -89,23 +89,22 @@
     <body>
         <div class="container">
             <h2>Video Loader</h2>
-            <p>Go to <a href="https://www.themoviedb.org/movie?language=en-US" target="_blank">tmdb</a> and search your desired movie to watch</p>
-            <h3>only movies.</h3>
+            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; margin-bottom:16px;">
+                <input type="text" id="moviesearch" placeholder="Search movie by name" autocomplete="off" oninput="debouncedSearchMovie()">
+                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
+                <button onclick="updateFrame()">Load Video</button>
+            </div>
             <iframe 
                 id="myframe"
                 src="https://www.vidking.net/embed/movie/" 
                 allowfullscreen
                 scrolling="no">
             </iframe>
-            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;">
-                <input type="text" id="moviesearch" placeholder="Search movie by name" autocomplete="off" oninput="debouncedSearchMovie()">
-                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
-                <button onclick="updateFrame()">Load Video</button>
-            </div>
         </div>
     </body>
     <script>
-        const TMDB_API_KEY = "7364ff0703e575956f24d3eae07dfef0";
+    // Replace with your deployed Cloudflare Worker URL
+    const WORKER_BASE = "https://delicate-field-f1ed.ksaswin808.workers.dev";
         let searchTimeout;
         let selectedMovieId = "";
         function debouncedSearchMovie() {
@@ -119,7 +118,7 @@
             selectedMovieId = "";
             if (!query) return;
             try {
-                const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`);
+                const res = await fetch(`${WORKER_BASE}/search/movie?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 if (data.results && data.results.length > 0) {
                     let html = '<ul style="list-style:none;margin:0;padding:0;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;">';

@@ -90,19 +90,17 @@
     <body>
         <div class="container">
             <h2>TV Episode Loader</h2>
-            <p>Go to <a href="https://www.themoviedb.org/tv?language=en-US" target="_blank">tmdb</a> and search your desired TV show and episode to watch</p>
-            <h3>only TV shows.</h3>
+            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; margin-bottom:16px;">
+                <input type="text" id="showsearch" placeholder="Search show by name" autocomplete="off" oninput="debouncedSearchShow()">
+                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
+            </div>
             <iframe 
                 id="tvframe"
                 src="https://www.vidking.net/embed/tv/" 
-                width="500" 
-                height="300" 
                 allowfullscreen
                 scrolling="no">
             </iframe>
             <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;">
-                <input type="text" id="showsearch" placeholder="Search show by name" autocomplete="off" oninput="debouncedSearchShow()">
-                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
                 <select id="season" disabled><option value="">Season</option></select>
                 <select id="episode" disabled><option value="">Episode</option></select>
                 <button onclick="updateTVFrame()">Load Episode</button>
@@ -110,7 +108,8 @@
         </div>
     </body>
     <script>
-        const TMDB_API_KEY = "7364ff0703e575956f24d3eae07dfef0";
+    // Replace with your deployed Cloudflare Worker URL
+    const WORKER_BASE = "https://delicate-field-f1ed.ksaswin808.workers.dev";
         let searchTimeout;
         function debouncedSearchShow() {
             clearTimeout(searchTimeout);
@@ -126,7 +125,7 @@
             document.getElementById("episode").disabled = true;
             if (!query) return;
             try {
-                const res = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`);
+                const res = await fetch(`${WORKER_BASE}/search/tv?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 if (data.results && data.results.length > 0) {
                     let html = '<ul style="list-style:none;margin:0;padding:0;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;">';
@@ -154,7 +153,7 @@
             episodeSelect.disabled = true;
             if (!showid) return;
             try {
-                const res = await fetch(`https://api.themoviedb.org/3/tv/${showid}?api_key=${TMDB_API_KEY}`);
+                const res = await fetch(`${WORKER_BASE}/tv/${showid}`);
                 const data = await res.json();
                 if (data.seasons && data.seasons.length > 0) {
                     data.seasons.forEach(season => {
@@ -166,7 +165,7 @@
                     seasonSelect.dataset.showid = showid;
                 }
             } catch (e) {
-                alert("Could not fetch seasons. Check API key.");
+                alert("Could not fetch seasons. Check Worker URL.");
             }
         }
         document.getElementById("season").addEventListener("change", async function() {
@@ -177,7 +176,7 @@
             episodeSelect.disabled = true;
             if (!showid || !seasonNum) return;
             try {
-                const res = await fetch(`https://api.themoviedb.org/3/tv/${showid}/season/${seasonNum}?api_key=${TMDB_API_KEY}`);
+                const res = await fetch(`${WORKER_BASE}/tv/${showid}/season/${seasonNum}`);
                 const data = await res.json();
                 if (data.episodes && data.episodes.length > 0) {
                     data.episodes.forEach(ep => {
@@ -186,7 +185,7 @@
                     episodeSelect.disabled = false;
                 }
             } catch (e) {
-                alert("Could not fetch episodes. Check API key.");
+                alert("Could not fetch episodes. Check Worker URL.");
             }
         });
         function updateTVFrame() {
