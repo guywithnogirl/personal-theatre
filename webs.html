@@ -1,157 +1,330 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TV Series Loader - Personal Theatre</title>
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
             body {
-                background: linear-gradient(120deg, #f0f4f8 0%, #d9e7ff 100%);
-                font-family: 'Segoe UI', Arial, sans-serif;
+                background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #16213e 100%);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                min-height: 100vh;
-                margin: 0;
+                padding: 20px;
+                color: #e2e8f0;
             }
+            
+            .header {
+                margin-bottom: 32px;
+                text-align: center;
+                z-index: 10;
+            }
+            
+            .header a {
+                display: inline-block;
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 0.95rem;
+                margin-bottom: 16px;
+                transition: color 0.2s;
+            }
+            
+            .header a:hover {
+                color: #3b82f6;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 8px;
+                letter-spacing: -0.5px;
+            }
+            
             .container {
-                background: #fff;
+                background: rgba(15, 23, 42, 0.6);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(148, 163, 184, 0.1);
                 border-radius: 16px;
-                box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-                padding: 24px 8px;
+                padding: 36px 24px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 16px;
-                max-width: 600px;
+                gap: 20px;
+                max-width: 620px;
                 width: 100%;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
+            
             h2 {
-                margin-bottom: 8px;
-                color: #2a4d8f;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                color: #f1f5f9;
+                margin-bottom: 4px;
+                font-weight: 600;
+                letter-spacing: -0.3px;
             }
-            input[type="text"], select {
-                padding: 10px 14px;
-                border: 1px solid #b0c4de;
-                border-radius: 8px;
-                font-size: 1rem;
-                outline: none;
-                transition: border-color 0.2s;
-                margin-right: 0;
-                margin-bottom: 8px;
+            
+            .search-wrapper {
                 width: 100%;
-                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                position: relative;
+                margin-bottom: 8px;
             }
+            
+            input[type="text"], select {
+                padding: 12px 16px;
+                border: 1.5px solid rgba(148, 163, 184, 0.2);
+                border-radius: 10px;
+                font-size: 1rem;
+                background: rgba(30, 41, 59, 0.5);
+                color: #f1f5f9;
+                outline: none;
+                transition: all 0.2s;
+                width: 100%;
+                max-width: 360px;
+                font-family: inherit;
+            }
+            
+            input[type="text"]::placeholder, select::placeholder {
+                color: #94a3b8;
+            }
+            
             input[type="text"]:focus, select:focus {
-                border-color: #2a4d8f;
+                border-color: rgba(59, 130, 246, 0.5);
+                background: rgba(30, 41, 59, 0.8);
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
             }
+            
+            select {
+                cursor: pointer;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                padding-right: 36px;
+            }
+            
+            select:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
             button {
-                padding: 10px 18px;
-                background: #2a4d8f;
+                padding: 12px 28px;
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
                 color: #fff;
                 border: none;
-                border-radius: 8px;
-                font-size: 1rem;
+                border-radius: 10px;
+                font-size: 0.95rem;
+                font-weight: 600;
                 cursor: pointer;
-                transition: background 0.2s;
+                transition: all 0.2s;
                 width: 100%;
-                margin-bottom: 8px;
+                max-width: 360px;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                letter-spacing: 0.3px;
             }
+            
             button:hover {
-                background: #1d3560;
+                background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+                transform: translateY(-1px);
             }
+            
+            button:active {
+                transform: translateY(0);
+            }
+            
+            #searchResultsContainer {
+                position: absolute;
+                top: 44px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 360px;
+                z-index: 20;
+            }
+            
+            #searchResultsContainer ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                border-radius: 10px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                max-height: 200px;
+                overflow-y: auto;
+            }
+            
+            #searchResultsContainer li {
+                padding: 10px 14px;
+                cursor: pointer;
+                transition: all 0.15s;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+                color: #cbd5e1;
+                font-size: 0.9rem;
+            }
+            
+            #searchResultsContainer li:last-child {
+                border-bottom: none;
+            }
+            
+            #searchResultsContainer li:hover {
+                background: rgba(59, 130, 246, 0.2);
+                color: #bfdbfe;
+                padding-left: 18px;
+            }
+            
+            .controls {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                position: relative;
+            }
+            
             iframe {
                 border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-                border: none;
+                box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+                border: 1px solid rgba(148, 163, 184, 0.1);
                 width: 100%;
-                max-width: 500px;
-                height: 250px;
+                max-width: 520px;
+                height: 280px;
+                background: #0f172a;
             }
-            #searchResultsContainer {
-                width: 100%;
-                left: 0;
-                right: 0;
-            }
-            @media (min-width: 600px) {
+            
+            @media (min-width: 640px) {
                 .container {
-                    padding: 32px 24px;
-                    gap: 20px;
+                    padding: 40px 32px;
+                    gap: 24px;
                 }
+                
                 iframe {
-                    height: 300px;
+                    height: 320px;
                 }
-                input[type="text"], select, button {
-                    font-size: 1.1rem;
-                    max-width: 350px;
+                
+                h2 {
+                    font-size: 1.4rem;
                 }
+            }
+            
+            /* Scrollbar styling */
+            #searchResultsContainer ul::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-thumb {
+                background: rgba(59, 130, 246, 0.3);
+                border-radius: 3px;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-thumb:hover {
+                background: rgba(59, 130, 246, 0.5);
             }
         </style>
     </head>
     <body>
+        <div class="header">
+            <a href="index.html">← Back to Home</a>
+            <h1>📺 TV Series Loader</h1>
+        </div>
+        
         <div class="container">
-            <h2>TV Episode Loader</h2>
-            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; margin-bottom:16px;">
-                <input type="text" id="showsearch" placeholder="Search show by name" autocomplete="off" oninput="debouncedSearchShow()">
-                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
+            <h2>Find & Watch Episodes</h2>
+            <div class="search-wrapper">
+                <input type="text" id="showsearch" placeholder="Search show by name..." autocomplete="off" oninput="debouncedSearchShow()">
+                <div id="searchResultsContainer"></div>
             </div>
+            
+            <div class="controls">
+                <select id="season" disabled>
+                    <option value="">Select Season</option>
+                </select>
+                <select id="episode" disabled>
+                    <option value="">Select Episode</option>
+                </select>
+                <button onclick="updateTVFrame()">Load Episode</button>
+            </div>
+            
             <iframe 
                 id="tvframe"
                 src="https://www.vidking.net/embed/tv/" 
                 allowfullscreen
                 scrolling="no">
             </iframe>
-            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;">
-                <select id="season" disabled><option value="">Season</option></select>
-                <select id="episode" disabled><option value="">Episode</option></select>
-                <button onclick="updateTVFrame()">Load Episode</button>
-            </div>
         </div>
     </body>
     <script>
-    // Replace with your deployed Cloudflare Worker URL
     const WORKER_BASE = "https://delicate-field-f1ed.ksaswin808.workers.dev";
         let searchTimeout;
+        
         function debouncedSearchShow() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(searchShow, 400);
         }
+        
         async function searchShow() {
             const query = document.getElementById("showsearch").value.trim();
             const container = document.getElementById("searchResultsContainer");
             container.innerHTML = '';
-            document.getElementById("season").innerHTML = '<option value="">Season</option>';
-            document.getElementById("episode").innerHTML = '<option value="">Episode</option>';
+            document.getElementById("season").innerHTML = '<option value="">Select Season</option>';
+            document.getElementById("episode").innerHTML = '<option value="">Select Episode</option>';
             document.getElementById("season").disabled = true;
             document.getElementById("episode").disabled = true;
+            
             if (!query) return;
+            
             try {
                 const res = await fetch(`${WORKER_BASE}/search/tv?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 if (data.results && data.results.length > 0) {
-                    let html = '<ul style="list-style:none;margin:0;padding:0;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;">';
+                    let html = '<ul>';
                     data.results.forEach(show => {
-                        html += `<li style='padding:8px 16px;cursor:pointer;' onmousedown='selectShowFromList(${show.id}, "${show.name.replace(/'/g, "\'")}")'>${show.name} (${show.first_air_date ? show.first_air_date.substring(0,4) : ''})</li>`;
+                        const year = show.first_air_date ? show.first_air_date.substring(0, 4) : 'N/A';
+                        html += `<li onmousedown='selectShowFromList(${show.id}, "${show.name.replace(/"/g, '\\"')}")'>${show.name} (${year})</li>`;
                     });
                     html += '</ul>';
                     container.innerHTML = html;
                 }
             } catch (e) {
-                container.innerHTML = '';
+                console.error('Search failed:', e);
             }
         }
+        
         function selectShowFromList(showid, showname) {
             document.getElementById("showsearch").value = showname;
             document.getElementById("searchResultsContainer").innerHTML = '';
             fetchSeasons(showid);
         }
+        
         async function fetchSeasons(showid) {
             const seasonSelect = document.getElementById("season");
             const episodeSelect = document.getElementById("episode");
-            seasonSelect.innerHTML = '<option value="">Season</option>';
-            episodeSelect.innerHTML = '<option value="">Episode</option>';
+            seasonSelect.innerHTML = '<option value="">Select Season</option>';
+            episodeSelect.innerHTML = '<option value="">Select Episode</option>';
             seasonSelect.disabled = true;
             episodeSelect.disabled = true;
+            
             if (!showid) return;
+            
             try {
                 const res = await fetch(`${WORKER_BASE}/tv/${showid}`);
                 const data = await res.json();
@@ -165,16 +338,19 @@
                     seasonSelect.dataset.showid = showid;
                 }
             } catch (e) {
-                alert("Could not fetch seasons. Check Worker URL.");
+                console.error('Could not fetch seasons:', e);
             }
         }
+        
         document.getElementById("season").addEventListener("change", async function() {
             const showid = this.dataset.showid;
             const seasonNum = this.value;
             const episodeSelect = document.getElementById("episode");
-            episodeSelect.innerHTML = '<option value="">Episode</option>';
+            episodeSelect.innerHTML = '<option value="">Select Episode</option>';
             episodeSelect.disabled = true;
+            
             if (!showid || !seasonNum) return;
+            
             try {
                 const res = await fetch(`${WORKER_BASE}/tv/${showid}/season/${seasonNum}`);
                 const data = await res.json();
@@ -185,16 +361,18 @@
                     episodeSelect.disabled = false;
                 }
             } catch (e) {
-                alert("Could not fetch episodes. Check Worker URL.");
+                console.error('Could not fetch episodes:', e);
             }
         });
+        
         function updateTVFrame() {
-            var showid = document.getElementById("season").dataset.showid;
-            var season = document.getElementById("season").value;
-            var episode = document.getElementById("episode").value;
-            var tvframe = document.getElementById("tvframe");
-            if(showid && season && episode) {
-                tvframe.src = `https://www.vidking.net/embed/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=e50914&autoPlay=true&nextEpisode=true&episodeSelector=true`;
+            const showid = document.getElementById("season").dataset.showid;
+            const season = document.getElementById("season").value;
+            const episode = document.getElementById("episode").value;
+            const tvframe = document.getElementById("tvframe");
+            
+            if (showid && season && episode) {
+                tvframe.src = `https://www.vidking.net/embed/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=3b82f6&autoPlay=true&nextEpisode=true&episodeSelector=true`;
             }
         }
     </script>

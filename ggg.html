@@ -1,97 +1,234 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movie Loader - Personal Theatre</title>
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
             body {
-                background: linear-gradient(120deg, #f0f4f8 0%, #d9e7ff 100%);
-                font-family: 'Segoe UI', Arial, sans-serif;
+                background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #16213e 100%);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                min-height: 100vh;
-                margin: 0;
+                padding: 20px;
+                color: #e2e8f0;
             }
+            
+            .header {
+                margin-bottom: 32px;
+                text-align: center;
+                z-index: 10;
+            }
+            
+            .header a {
+                display: inline-block;
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 0.95rem;
+                margin-bottom: 16px;
+                transition: color 0.2s;
+            }
+            
+            .header a:hover {
+                color: #ef4444;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 8px;
+                letter-spacing: -0.5px;
+            }
+            
             .container {
-                background: #fff;
+                background: rgba(15, 23, 42, 0.6);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(148, 163, 184, 0.1);
                 border-radius: 16px;
-                box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-                padding: 24px 8px;
+                padding: 36px 24px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 16px;
-                max-width: 600px;
+                gap: 20px;
+                max-width: 620px;
                 width: 100%;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
+            
             h2 {
-                margin-bottom: 8px;
-                color: #2a4d8f;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                color: #f1f5f9;
+                margin-bottom: 4px;
+                font-weight: 600;
+                letter-spacing: -0.3px;
             }
-            input[type="text"] {
-                padding: 10px 14px;
-                border: 1px solid #b0c4de;
-                border-radius: 8px;
-                font-size: 1rem;
-                outline: none;
-                transition: border-color 0.2s;
-                margin-bottom: 8px;
+            
+            .search-wrapper {
                 width: 100%;
-                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                position: relative;
+                margin-bottom: 8px;
             }
+            
+            input[type="text"] {
+                padding: 12px 16px;
+                border: 1.5px solid rgba(148, 163, 184, 0.2);
+                border-radius: 10px;
+                font-size: 1rem;
+                background: rgba(30, 41, 59, 0.5);
+                color: #f1f5f9;
+                outline: none;
+                transition: all 0.2s;
+                width: 100%;
+                max-width: 360px;
+                font-family: inherit;
+            }
+            
+            input[type="text"]::placeholder {
+                color: #94a3b8;
+            }
+            
             input[type="text"]:focus {
-                border-color: #2a4d8f;
+                border-color: rgba(239, 68, 68, 0.5);
+                background: rgba(30, 41, 59, 0.8);
+                box-shadow: 0 0 12px rgba(239, 68, 68, 0.15);
             }
+            
             button {
-                padding: 10px 18px;
-                background: #2a4d8f;
+                padding: 12px 28px;
+                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
                 color: #fff;
                 border: none;
-                border-radius: 8px;
-                font-size: 1rem;
+                border-radius: 10px;
+                font-size: 0.95rem;
+                font-weight: 600;
                 cursor: pointer;
-                transition: background 0.2s;
+                transition: all 0.2s;
                 width: 100%;
-                margin-bottom: 8px;
+                max-width: 360px;
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+                letter-spacing: 0.3px;
             }
+            
             button:hover {
-                background: #1d3560;
+                background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+                box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+                transform: translateY(-1px);
             }
+            
+            button:active {
+                transform: translateY(0);
+            }
+            
+            #searchResultsContainer {
+                position: absolute;
+                top: 44px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 360px;
+                z-index: 20;
+            }
+            
+            #searchResultsContainer ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                border-radius: 10px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                max-height: 200px;
+                overflow-y: auto;
+            }
+            
+            #searchResultsContainer li {
+                padding: 10px 14px;
+                cursor: pointer;
+                transition: all 0.15s;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+                color: #cbd5e1;
+                font-size: 0.9rem;
+            }
+            
+            #searchResultsContainer li:last-child {
+                border-bottom: none;
+            }
+            
+            #searchResultsContainer li:hover {
+                background: rgba(239, 68, 68, 0.2);
+                color: #fecaca;
+                padding-left: 18px;
+            }
+            
             iframe {
                 border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-                border: none;
+                box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+                border: 1px solid rgba(148, 163, 184, 0.1);
                 width: 100%;
-                max-width: 500px;
-                height: 250px;
+                max-width: 520px;
+                height: 280px;
+                background: #0f172a;
             }
-            #searchResultsContainer {
-                width: 100%;
-                left: 0;
-                right: 0;
-            }
-            @media (min-width: 600px) {
+            
+            @media (min-width: 640px) {
                 .container {
-                    padding: 32px 24px;
-                    gap: 20px;
+                    padding: 40px 32px;
+                    gap: 24px;
                 }
+                
                 iframe {
-                    height: 300px;
+                    height: 320px;
                 }
-                input[type="text"], button {
-                    font-size: 1.1rem;
-                    max-width: 350px;
+                
+                h2 {
+                    font-size: 1.4rem;
                 }
+            }
+            
+            /* Scrollbar styling */
+            #searchResultsContainer ul::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-thumb {
+                background: rgba(239, 68, 68, 0.3);
+                border-radius: 3px;
+            }
+            
+            #searchResultsContainer ul::-webkit-scrollbar-thumb:hover {
+                background: rgba(239, 68, 68, 0.5);
             }
         </style>
     </head>
     <body>
+        <div class="header">
+            <a href="index.html">← Back to Home</a>
+            <h1>🎥 Movie Loader</h1>
+        </div>
+        
         <div class="container">
-            <h2>Video Loader</h2>
-            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; margin-bottom:16px;">
-                <input type="text" id="moviesearch" placeholder="Search movie by name" autocomplete="off" oninput="debouncedSearchMovie()">
-                <div id="searchResultsContainer" style="position:absolute; top:44px; left:0; right:0; z-index:10;"></div>
+            <h2>Find & Play Movies</h2>
+            <div class="search-wrapper">
+                <input type="text" id="moviesearch" placeholder="Search movie by name..." autocomplete="off" oninput="debouncedSearchMovie()">
+                <div id="searchResultsContainer"></div>
                 <button onclick="updateFrame()">Load Video</button>
             </div>
             <iframe 
@@ -103,43 +240,49 @@
         </div>
     </body>
     <script>
-    // Replace with your deployed Cloudflare Worker URL
     const WORKER_BASE = "https://delicate-field-f1ed.ksaswin808.workers.dev";
         let searchTimeout;
         let selectedMovieId = "";
+        
         function debouncedSearchMovie() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(searchMovie, 400);
         }
+        
         async function searchMovie() {
             const query = document.getElementById("moviesearch").value.trim();
             const container = document.getElementById("searchResultsContainer");
             container.innerHTML = '';
             selectedMovieId = "";
+            
             if (!query) return;
+            
             try {
                 const res = await fetch(`${WORKER_BASE}/search/movie?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 if (data.results && data.results.length > 0) {
-                    let html = '<ul style="list-style:none;margin:0;padding:0;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;">';
+                    let html = '<ul>';
                     data.results.forEach(movie => {
-                        html += `<li style='padding:8px 16px;cursor:pointer;' onmousedown='selectMovieFromList(${movie.id}, \"${movie.title.replace(/'/g, "\\'")}\")'>${movie.title} (${movie.release_date ? movie.release_date.substring(0,4) : ''})</li>`;
+                        const year = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
+                        html += `<li onmousedown='selectMovieFromList(${movie.id}, "${movie.title.replace(/"/g, '\\"')}")'>${movie.title} (${year})</li>`;
                     });
                     html += '</ul>';
                     container.innerHTML = html;
                 }
             } catch (e) {
-                container.innerHTML = '';
+                console.error('Search failed:', e);
             }
         }
+        
         function selectMovieFromList(movieid, moviename) {
             document.getElementById("moviesearch").value = moviename;
             document.getElementById("searchResultsContainer").innerHTML = '';
             selectedMovieId = movieid;
         }
+        
         function updateFrame() {
-            var myframe = document.getElementById("myframe");
-            if(selectedMovieId) {
+            const myframe = document.getElementById("myframe");
+            if (selectedMovieId) {
                 myframe.src = "https://www.vidking.net/embed/movie/" + encodeURIComponent(selectedMovieId);
             }
         }

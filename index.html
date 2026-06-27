@@ -1,47 +1,165 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Personal Theatre</title>
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
             body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #16213e 100%);
+                min-height: 100vh;
                 display: flex;
-                flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                min-height: 100vh;
-                background: linear-gradient(120deg, #f0f4f8 0%, #d9e7ff 100%);
-                font-family: 'Segoe UI', Arial, sans-serif;
+                overflow: hidden;
             }
+            
+            /* Background accent animation */
+            body::before {
+                content: '';
+                position: fixed;
+                top: -50%;
+                right: -10%;
+                width: 800px;
+                height: 800px;
+                background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+                pointer-events: none;
+                animation: float 15s ease-in-out infinite;
+            }
+            
+            body::after {
+                content: '';
+                position: fixed;
+                bottom: -30%;
+                left: -5%;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+                pointer-events: none;
+                animation: float 20s ease-in-out infinite reverse;
+            }
+            
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(30px); }
+            }
+            
+            .container {
+                position: relative;
+                z-index: 1;
+                text-align: center;
+                padding: 40px 20px;
+            }
+            
             h1 {
-                color: #2a4d8f;
-                margin-bottom: 32px;
+                font-size: 3.5rem;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 12px;
+                letter-spacing: -1px;
+                text-shadow: 0 2px 20px rgba(239, 68, 68, 0.2);
             }
+            
+            .tagline {
+                font-size: 1.1rem;
+                color: #cbd5e1;
+                margin-bottom: 48px;
+                font-weight: 300;
+                letter-spacing: 0.5px;
+            }
+            
             .btn-group {
                 display: flex;
-                gap: 24px;
+                gap: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
             }
+            
             a {
                 text-decoration: none;
             }
+            
             button {
-                padding: 16px 32px;
-                background: #2a4d8f;
-                color: #fff;
+                padding: 16px 40px;
+                font-size: 1.1rem;
+                font-weight: 600;
                 border: none;
-                border-radius: 10px;
-                font-size: 1.2rem;
+                border-radius: 12px;
                 cursor: pointer;
-                transition: background 0.2s;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+                letter-spacing: 0.5px;
             }
-            button:hover {
-                background: #1d3560;
+            
+            .btn-primary {
+                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                color: #fff;
+                box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            }
+            
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+                box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+                transform: translateY(-2px);
+            }
+            
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+            
+            .btn-secondary {
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                color: #fff;
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            }
+            
+            .btn-secondary:hover {
+                background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+                transform: translateY(-2px);
+            }
+            
+            .btn-secondary:active {
+                transform: translateY(0);
+            }
+            
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 2.5rem;
+                }
+                
+                .tagline {
+                    font-size: 1rem;
+                }
+                
+                .btn-group {
+                    flex-direction: column;
+                    gap: 16px;
+                }
+                
+                button {
+                    width: 100%;
+                    padding: 14px 32px;
+                    font-size: 1rem;
+                }
             }
         </style>
     </head>
     <body>
-        <h1>Welcome</h1>
-        <div class="btn-group">
-            <a href="ggg.html"><button>Movies</button></a>
-            <a href="webs.html"><button>Web Series</button></a>
+        <div class="container">
+            <h1>🎬 Personal Theatre</h1>
+            <p class="tagline">Your personal streaming gateway</p>
+            <div class="btn-group">
+                <a href="ggg.html"><button class="btn-primary">🎥 Movies</button></a>
+                <a href="webs.html"><button class="btn-secondary">📺 Web Series</button></a>
+            </div>
         </div>
     </body>
 </html>
