@@ -235,6 +235,7 @@
                 id="myframe"
                 src="https://www.vidy.st/movie/" 
                 allowfullscreen
+                allow="encrypted-media; autoplay *; fullscreen *"
                 scrolling="no">
             </iframe>
         </div>
@@ -283,7 +284,7 @@
         function updateFrame() {
             const myframe = document.getElementById("myframe");
             if (selectedMovieId) {
-                myframe.src = "https://www.vidking.net/embed/movie/" + encodeURIComponent(selectedMovieId);
+                myframe.src = "https://www.vidy.st/movie/" + encodeURIComponent(selectedMovieId);
             }
         }
     </script>

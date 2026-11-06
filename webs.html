@@ -266,8 +266,9 @@
             
             <iframe 
                 id="tvframe"
-                src="https://www.vidking.net/embed/tv/" 
+                src="https://www.vidy.st/tv/" 
                 allowfullscreen
+                allow="encrypted-media; autoplay *; fullscreen *"
                 scrolling="no">
             </iframe>
         </div>
@@ -372,7 +373,7 @@
             const tvframe = document.getElementById("tvframe");
             
             if (showid && season && episode) {
-                tvframe.src = `https://www.vidking.net/embed/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=3b82f6&autoPlay=true&nextEpisode=true&episodeSelector=true`;
+                tvframe.src = `https://www.vidy.st/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=3b82f6&autoplay=true&nextEpisode=true&episodeSelector=true`;
             }
         }
     </script>
