@@ -67,10 +67,11 @@
             <h3>only movies.</h3>
                     <iframe 
                         id="myframe"
-                        src="https://www.vidking.net/embed/movie/" 
+                        src="https://www.vidy.st/movie/" 
                         width="500" 
                         height="300" 
                         allowfullscreen
+                        allow="encrypted-media; autoplay *; fullscreen *"
                         scrolling="no">
                     </iframe>
                     <div style="width:100%; display:flex; justify-content:center; align-items:center;">
@@ -83,7 +84,7 @@
         function updateFrame() {
             var myinpt = document.getElementById("myinpt");
             var myframe = document.getElementById("myframe");
-            myframe.src = "https://www.vidking.net/embed/movie/" + encodeURIComponent(myinpt.value);
+            myframe.src = "https://www.vidy.st/movie/" + encodeURIComponent(myinpt.value);
         }
     </script>
 </html>

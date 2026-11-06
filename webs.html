@@ -94,10 +94,11 @@
             <h3>only TV shows.</h3>
             <iframe 
                 id="tvframe"
-                src="https://www.vidking.net/embed/tv/" 
+                src="https://www.vidy.st/tv/" 
                 width="500" 
                 height="300" 
                 allowfullscreen
+                allow="encrypted-media; autoplay *; fullscreen *"
                 scrolling="no">
             </iframe>
             <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;">
@@ -195,7 +196,7 @@
             var episode = document.getElementById("episode").value;
             var tvframe = document.getElementById("tvframe");
             if(showid && season && episode) {
-                tvframe.src = `https://www.vidking.net/embed/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=e50914&autoPlay=true&nextEpisode=true&episodeSelector=true`;
+                tvframe.src = `https://www.vidy.st/tv/${encodeURIComponent(showid)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?color=e50914&autoplay=true&nextEpisode=true&episodeSelector=true`;
             }
         }
     </script>
